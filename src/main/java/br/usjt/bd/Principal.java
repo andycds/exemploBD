@@ -1,5 +1,7 @@
 package br.usjt.bd;
 
+import java.util.List;
+
 import javax.swing.JOptionPane;
 
 public class Principal {
@@ -14,6 +16,7 @@ public class Principal {
 		int codigo;
 		Pessoa p;
 		int op;
+		PessoaDAO pessoaDao = new PessoaDAO();
 		do {
 			op = Integer.parseInt(JOptionPane.showInputDialog(menu));
 			switch (op) {
@@ -21,45 +24,39 @@ public class Principal {
 				nome = JOptionPane.showInputDialog("Nome?");
 				fone = JOptionPane.showInputDialog("Fone?");
 				email = JOptionPane.showInputDialog("Email?");
-				p = new Pessoa();
-				p.setNome(nome);
-				p.setFone(fone);
-				p.setEmail(email);
-				p.inserir();
+				p = new Pessoa(0, nome, fone, email);
+				pessoaDao.inserir(p);
 				break;
 			case 2:
 				nome = JOptionPane.showInputDialog("Nome?");
 				fone = JOptionPane.showInputDialog("Fone?");
 				email = JOptionPane.showInputDialog("Email?");
 				codigo = Integer.parseInt(JOptionPane.showInputDialog("Codigo?"));
-				p = new Pessoa();
-				p.setNome(nome);
-				p.setFone(fone);
-				p.setEmail(email);
-				p.setCodigo(codigo);
-				p.atualizar();
+				p = new Pessoa(codigo, nome, fone, email);
+				pessoaDao.atualizar(p);
 				break;
 			case 3:
 				codigo = Integer.parseInt(JOptionPane.showInputDialog("Codigo?"));
 				p = new Pessoa();
 				p.setCodigo(codigo);
-				p.apagar();
+				pessoaDao.apagar(p);
 				break;
 			case 4:
-				p = new Pessoa();
-				p.listar();
+				List<Pessoa> pessoas = pessoaDao.listar();
+				for (int i = 0; i < pessoas.size(); i++) {
+					JOptionPane.showMessageDialog(null, pessoas.get(i));
+				}
 				break;
 			case 5: // Exibir dados de uma pessoa
 				codigo = Integer.parseInt(JOptionPane.showInputDialog("Codigo?"));
-				p = new Pessoa();
-				p.setCodigo(codigo);
-				p.listarPessoaPorCodigo();
+				p = new Pessoa(codigo, null, null, null);
+				JOptionPane.showMessageDialog(null, pessoaDao.listarPessoaPorCodigo(p));
 				break;
 			case 6: // Apagar pessoa por email
 				email = JOptionPane.showInputDialog("Email?");
 				p = new Pessoa();
 				p.setEmail(email);
-				p.apagarPorEmail();
+				pessoaDao.apagarPorEmail(p);
 				break;
 			case 0:
 				break;
